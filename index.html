@@ -40,6 +40,7 @@
             align-items: center;
             gap: 20px;
             flex-wrap: wrap;
+            position: relative;
         }
 
         .logo {
@@ -81,6 +82,7 @@
             gap: 15px;
             align-items: center;
             flex: 0 0 auto;
+            position: relative;
         }
 
         .btn-login {
@@ -100,6 +102,63 @@
             background: #667eea;
             color: white;
             transform: translateY(-2px);
+        }
+
+        /* MUSIC PLAYER STYLES */
+        .music-toggle {
+            font-size: 22px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 12px;
+            transition: all 0.3s;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .music-player {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #f7f7f7;
+            padding: 14px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-align: center;
+            width: 200px;
+            margin-top: 8px;
+            z-index: 1000;
+        }
+
+        .music-player p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .music-player button {
+            font-size: 16px;
+            margin: 4px;
+            cursor: pointer;
+            background: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .music-player button:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .hidden {
+            display: none;
         }
 
         /* MENÚ HAMBURGUESA (Solo Mobile) */
@@ -744,6 +803,10 @@
             .game-card h2 {
                 font-size: 1.4em;
             }
+
+            .music-player {
+                right: 16px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -806,6 +869,16 @@
             .main-content {
                 padding: 15px 10px;
             }
+
+            .music-player {
+                width: 160px;
+                padding: 10px;
+            }
+
+            .music-player button {
+                font-size: 14px;
+                padding: 4px 6px;
+            }
         }
     </style>
 </head>
@@ -824,6 +897,14 @@
                 </ul>
             </nav>
             <div class="header-actions">
+                <button class="music-toggle" onclick="togglePlayer()">🎵</button>
+                <div id="music-player" class="music-player hidden">
+                    <p id="song-title">🎵 Sin música</p>
+                    <button onclick="prevSong()">⏮️</button>
+                    <button onclick="toggleMusic()">▶️ / ⏸️</button>
+                    <button onclick="nextSong()">⏭️</button>
+                    <button onclick="muteMusic()">🔇</button>
+                </div>
                 <button class="btn-login">Regístrate Ya</button>
             </div>
         </div>
@@ -998,7 +1079,7 @@
                 <p></p>
                   <form action="https://www.paypal.com/donate" method="post" target="_top">
                     <input type="hidden" name="hosted_button_id" value="R4JXX58A5S7FW" />
-                    <input type="image" src="https://pics.paypal.com/00/s/OTUxMmIxOGItYzY1MS00NWVlLWI0ZDMtODhiYzNkMTFkZjY5/file.PNG" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donar con el botón PayPal" />
+                    <input type="image" src="https://pics.paypal.com/00/s/OTUxMmIxOGItYzY1MS00NWVlLWI0ZDMtODhiYzNkMTFkZjY5L2ZpbGUuUE5H" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donar con el botón PayPal" />
                     <img alt="" border="0" src="https://www.paypal.com/es_MX/i/scr/pixel.gif" width="1" height="1" />
                 </form>
             </div>
@@ -1009,6 +1090,59 @@
     </footer>
     
     <script>
+        // ===== MUSIC PLAYER =====
+        const songs = [
+            { title: "Learning Is Play", src: "C:\Users\fidel\Music\Learning.mp3" },
+            { title: "Ideas in Motion", src: "music/trazos.mp3" },
+            { title: "Small Minds, Big Questions", src: "music/mates.mp3" },
+            { title: "One More Step", src: "music/dibujo.mp3" },
+            { title: "Colors That Teach", src: "music/memoria.mp3" },
+            { title: "Thinking Slowly", src: "music/reto.mp3" },
+            { title: "The Spark of Knowledge", src: "music/juego.mp3" },
+            { title: "Dreams Add Up", src: "music/creativo.mp3" },
+            { title: "Endless Curiosity", src: "music/focus.mp3" },
+            { title: "The Sound of Learning", src: "music/learning.mp3" }
+        ];
+
+        let currentSong = 0;
+        const audio = new Audio();
+        audio.volume = 0.3;
+        audio.loop = true;
+
+        function togglePlayer() {
+            document.getElementById("music-player").classList.toggle("hidden");
+        }
+
+        function loadSong(index) {
+            audio.src = songs[index].src;
+            document.getElementById("song-title").textContent = "🎵 " + songs[index].title;
+        }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                loadSong(currentSong);
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+
+        function nextSong() {
+            currentSong = (currentSong + 1) % songs.length;
+            loadSong(currentSong);
+            audio.play();
+        }
+
+        function prevSong() {
+            currentSong = (currentSong - 1 + songs.length) % songs.length;
+            loadSong(currentSong);
+            audio.play();
+        }
+
+        function muteMusic() {
+            audio.muted = !audio.muted;
+        }
+
         // MENU TOGGLE FOR MOBILE
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
@@ -1882,4 +2016,3 @@
     </script>
 </body> 
 </html>
-
