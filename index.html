@@ -25,7 +25,7 @@
         /* HEADER STYLES */
         header {
             background: rgba(255, 255, 255, 0.95);
-            padding: 15px 40px;
+            padding: 15px 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
@@ -38,7 +38,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -46,13 +47,18 @@
             font-weight: 800;
             color: #667eea;
             text-decoration: none;
+            white-space: nowrap;
+            flex: 0 0 auto;
         }
 
         .nav-menu {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             list-style: none;
             flex: 1;
+            justify-content: center;
+            flex-wrap: wrap;
+            min-width: 0;
         }
 
         .nav-menu a {
@@ -61,6 +67,8 @@
             font-weight: 600;
             transition: all 0.3s;
             color: #667eea;
+            white-space: nowrap;
+            font-size: 0.95em;
         }
 
         .nav-menu a:hover {
@@ -72,6 +80,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex: 0 0 auto;
         }
 
         .btn-login {
@@ -83,12 +92,24 @@
             cursor: pointer;
             font-weight: 700;
             transition: all 0.3s;
+            white-space: nowrap;
+            font-size: 0.95em;
         }
 
         .btn-login:hover {
             background: #667eea;
             color: white;
             transform: translateY(-2px);
+        }
+
+        /* MENÚ HAMBURGUESA (Solo Mobile) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #667eea;
         }
 
         body::before {
@@ -617,6 +638,175 @@
             gap: 12px;
             margin: 25px 0;
         }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .header-content {
+                gap: 15px;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .nav-menu a {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 10px 16px;
+            }
+
+            .header-content {
+                gap: 10px;
+                justify-content: space-between;
+            }
+
+            .logo {
+                font-size: 1.2em;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.95);
+                flex-direction: column;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                justify-content: flex-start;
+            }
+
+            .nav-menu.active {
+                max-height: 250px;
+            }
+
+            .nav-menu li {
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                padding: 0;
+            }
+
+            .nav-menu a {
+                display: block;
+                padding: 12px 16px;
+                font-size: 0.9em;
+            }
+
+            .header-actions {
+                display: flex;
+                gap: 10px;
+                flex: 0 0 100%;
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .btn-login {
+                flex: 1;
+                padding: 10px 16px;
+                font-size: 0.85em;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 0.95em;
+            }
+
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+
+            .games-container {
+                grid-template-columns: 1fr;
+            }
+
+            .game-card {
+                padding: 20px;
+            }
+
+            .game-card h2 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 8px 12px;
+            }
+
+            .logo {
+                font-size: 1em;
+            }
+
+            .btn-login {
+                padding: 8px 12px;
+                font-size: 0.8em;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+                letter-spacing: 1px;
+            }
+
+            .header p {
+                font-size: 0.85em;
+            }
+
+            .stat-card {
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
+
+            .carousel-slide {
+                height: 200px;
+            }
+
+            .carousel-text h3 {
+                font-size: 1.3em;
+            }
+
+            .carousel-text p {
+                font-size: 0.85em;
+            }
+
+            .carousel-btn {
+                display: none;
+            }
+
+            .game-card {
+                padding: 15px;
+            }
+
+            .game-card h2 {
+                font-size: 1.1em;
+                gap: 5px;
+            }
+
+            .game-card p {
+                font-size: 0.85em;
+            }
+
+            .main-content {
+                padding: 15px 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -624,8 +814,9 @@
     <header>
         <div class="header-content">
             <a href="#" class="logo">🎓 Little Minds</a>
+            <button class="menu-toggle" id="menuToggle">☰</button>
             <nav>
-                <ul class="nav-menu">
+                <ul class="nav-menu" id="navMenu">
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#actividades">Actividades</a></li>
                     <li><a href="#ayuda">Ayuda</a></li>
@@ -818,6 +1009,21 @@
     </footer>
     
     <script>
+        // MENU TOGGLE FOR MOBILE
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Cerrar menú cuando se hace clic en un enlace
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
         // CAROUSEL SCRIPT
         let currentSlide = 0;
         const slides = document.querySelectorAll('.carousel-slide').length;
@@ -1327,13 +1533,13 @@
             let modeText = tictactoeGame.mode === 'bot' ? `🤖 Bot (${tictactoeGame.difficulty})` : '👥 Amigo';
             let html = `<h2>⭕ Tic Tac Toe</h2>
                         <p style="text-align:center; color: #667eea; font-weight:bold; margin:10px 0;">${modeText}</p>
-                        <div style="display:flex; justify-content:space-around; margin:15px 0; font-weight:bold;">
+                        <div style="display:flex; justify-content:space-around; margin:15px 0; font-weight:bold; flex-wrap:wrap; gap:10px;">
                             <div>✅ Ganas: <span style="color:#72F80F;">${tictactoeGame.tictactoeScore.wins}</span></div>
                             <div>🤝 Empates: <span style="color:#FFC93C;">${tictactoeGame.tictactoeScore.draws}</span></div>
                             <div>❌ Pierdes: <span style="color:#FF6B6B;">${tictactoeGame.tictactoeScore.losses}</span></div>
                         </div>
                         <p style="text-align:center; font-size:1.1em; margin:15px 0;">Turno: <strong style="color:#667eea;">${tictactoeGame.player === 'X' ? 'Tu turno (X)' : 'Turno del ' + (tictactoeGame.mode === 'bot' ? 'Bot' : 'Jugador 2') + ' (O)'}</strong></p>
-                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin:20px 0;">`;
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin:20px 0; max-width:300px; margin-left:auto; margin-right:auto;">`;
             
             tictactoeGame.board.forEach((cell, index) => {
                 html += `<button class="tile" onclick="playTicTacToe(${index})" style="font-size:2em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); ${cell ? 'pointer-events:none;' : ''}">${cell}</button>`;
@@ -1346,8 +1552,10 @@
                 html += resultMessage;
             }
             
-            html += `<button class="btn" onclick="startTicTacToeGame()" style="width:100%; margin-top:15px;">Nueva Partida</button>
-                     <button class="btn" onclick="showTicTacToeMenu()" style="width:100%; margin-top:10px; background:#764ba2; color:white;">Volver al Menú</button>`;
+            html += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:15px;">
+                        <button class="btn" onclick="startTicTacToeGame()">🔄 Nueva Partida</button>
+                        <button class="btn" onclick="showTicTacToeMenu()">← Menú</button>
+                     </div>`;
             
             document.getElementById('gameContent').innerHTML = html;
         }
